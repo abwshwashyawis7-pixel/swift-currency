@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConvertPairRouteImport } from './routes/convert.$pair'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RatesRoute = RatesRouteImport.update({
   id: '/rates',
   path: '/rates',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/rates': typeof RatesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/rates': typeof RatesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/rates': typeof RatesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/news' | '/rates' | '/convert/$pair'
+  fullPaths: '/' | '/news' | '/rates' | '/sitemap.xml' | '/convert/$pair'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/news' | '/rates' | '/convert/$pair'
-  id: '__root__' | '/' | '/news' | '/rates' | '/convert/$pair'
+  to: '/' | '/news' | '/rates' | '/sitemap.xml' | '/convert/$pair'
+  id: '__root__' | '/' | '/news' | '/rates' | '/sitemap.xml' | '/convert/$pair'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NewsRoute: typeof NewsRoute
   RatesRoute: typeof RatesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ConvertPairRoute: typeof ConvertPairRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rates': {
       id: '/rates'
       path: '/rates'
@@ -106,8 +123,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NewsRoute: NewsRoute,
   RatesRoute: RatesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ConvertPairRoute: ConvertPairRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
