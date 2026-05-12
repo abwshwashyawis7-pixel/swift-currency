@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RatesRouteImport } from './routes/rates'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ConvertPairRouteImport } from './routes/convert.$pair'
 
+const RatesRoute = RatesRouteImport.update({
+  id: '/rates',
+  path: '/rates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +31,43 @@ const ConvertPairRoute = ConvertPairRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/rates': typeof RatesRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/rates': typeof RatesRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/rates': typeof RatesRoute
   '/convert/$pair': typeof ConvertPairRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/convert/$pair'
+  fullPaths: '/' | '/rates' | '/convert/$pair'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/convert/$pair'
-  id: '__root__' | '/' | '/convert/$pair'
+  to: '/' | '/rates' | '/convert/$pair'
+  id: '__root__' | '/' | '/rates' | '/convert/$pair'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RatesRoute: typeof RatesRoute
   ConvertPairRoute: typeof ConvertPairRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rates': {
+      id: '/rates'
+      path: '/rates'
+      fullPath: '/rates'
+      preLoaderRoute: typeof RatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RatesRoute: RatesRoute,
   ConvertPairRoute: ConvertPairRoute,
 }
 export const routeTree = rootRouteImport
