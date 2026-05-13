@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>/</loc><priority>1.0</priority></url>
+  <url><loc>/rates</loc><priority>0.8</priority></url>
+  <url><loc>/news</loc><priority>0.6</priority></url>
+  <url><loc>/convert/usd-to-eur</loc><priority>0.7</priority></url>
+  <url><loc>/convert/usd-to-gbp</loc><priority>0.7</priority></url>
+  <url><loc>/convert/usd-to-jpy</loc><priority>0.7</priority></url>
+  <url><loc>/convert/eur-to-gbp</loc><priority>0.7</priority></url>
+  <url><loc>/convert/usd-to-cad</loc><priority>0.7</priority></url>
+  <url><loc>/convert/usd-to-aud</loc><priority>0.7</priority></url>
+  <url><loc>/convert/gbp-to-eur</loc><priority>0.7</priority></url>
+  <url><loc>/convert/usd-to-inr</loc><priority>0.7</priority></url>
+</urlset>
